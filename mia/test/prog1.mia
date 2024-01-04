@@ -1,0 +1,51 @@
+// this is a comment
+
+$CONST_1 1
+$CONST_2 2 
+
+.at 0
+start:
+    and r0, r1
+    orr r1, 0x7f
+    add.s r2, 1
+    sub.sc r2, r0
+LABEL:
+    cmp r1, r2 // to je komentar
+    tst r1, r2
+LABEL2: ldr r0, r1, 10
+    str r0, r1, 10
+    mov r0, r1
+    mov.n r0, r1
+    lsl.n r0, r1, 10
+    lsr r0, r1, 10
+    asr.n r0, r1, 10
+    mov r1, 0xffff
+    b LABEL
+    b 10
+    mov r0, DATA_3
+    b.eq -1
+    b.ne 1
+    b.hs -1
+    b.lo 1
+    b.mi -1
+    b.pl 1
+    b.vs -1
+    b.vc 1 // comment, hi
+    b.hi -1
+    b.ls 1
+    b.ge -1
+    b.lt 1
+    b.gt -1
+    b.le LABEL
+    b.xx start
+    b.al 0
+
+DATA_1:
+.var 10, 0xffff, 10, 1, 0 0x0
+DATA_2:
+DATA_3:
+.fill 10 0
+DATA_4:
+.var -1 0xF
+.at 44
+.var 0xCA7 1 2 3 

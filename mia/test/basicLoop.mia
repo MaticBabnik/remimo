@@ -1,0 +1,17 @@
+// basicLoop.mia
+// --------------------------
+// Sums up numbers from 1-10 (result stored @ 0xff)
+
+$DEST 0xff
+$TEN 10
+
+START: //redundant label
+    mov     r1  TEN
+LOOP:
+    add     r0, r1
+    sub.s   r1  1
+    b.ne    LOOP
+    
+    str r0 r2 DEST
+
+INF:b INF //get stuck in a loop

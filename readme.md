@@ -6,27 +6,14 @@ It's based on [MiniMiMo](https://github.com/LAPSyLAB/RALab-STM32H7/tree/main/Min
 
 ## CPU documentation
 
-- [Architecture](docs/arch.md)
-- [Instruction table](docs/ReMiMo.ods)
+-   [Architecture](docs/arch.md)
+-   [Instruction table](docs/ReMiMo.ods)
 
 ## MImo Assembler
 
-A very primitive assembler which can generate `.ram` files.
+The most scuffed assembler ever!? To assemble a program run:
+`node mia.js source.mia output.ram`
 
-To assemble a simple program:
-
-1. Edit the `prog` array
-
-```js
-// example program
-const prog = [ 
-    mov(r0, 100),
-    mov(r1, 200),
-    cmp(r0, r1),
-    brc(le, 127)
-];
-```
-
-2. Run `node mia.js > test.ram`
+For example programs see the `mia/test` directory.
 
 ![Screenshot of the main circuit](docs/remimo.png)
