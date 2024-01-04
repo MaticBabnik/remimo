@@ -1,7 +1,7 @@
 import syntax from "syntax-cli";
 import lexGrammar from "./mia.lex.js";
 import { readFile } from "fs/promises";
-import { createWriteStream } from "fs";
+import { createWriteStream, readFileSync } from "fs";
 import { instructionEmitters } from "./remimo.js";
 import MiaError from "./error.js";
 
@@ -222,11 +222,22 @@ function handleDirective(tk, tl, state) {
             break;
         case "bin_include":
             const fn = tl.take("STRING");
-            throw new MiaError(
-                tk,
-                "NotImplemented",
-                "bin_include not implemented yet"
-            );
+
+            let buf;
+            try {
+                buf = readFileSync(fn.value);
+            } catch {
+                throw new MiaError(
+                    tk,
+                    "FileError",
+                    `Couldn't include "${fn.value}"`
+                );
+            }
+            const l = Math.ceil(buf.length);
+
+            for (let i = 0; i < l; i += 2) {
+                state.pushMemory({ t: "DATA", val: buf.readUint16BE(i) });
+            }
             break;
         default:
             throw new MiaError(tk, "UnknownDirective", "");
@@ -272,6 +283,7 @@ function handleInstruction(tk, tl, state) {
     }
     if (ispec.o)
         for (let kinds of ispec.o) {
+            if (!kinds.includes(tl.peek().type)) break;
             instruction.args.push(tl.take(...kinds));
         }
 

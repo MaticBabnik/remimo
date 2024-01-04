@@ -1,0 +1,22 @@
+$FB_BASE 0x4000
+.at 0
+    mov r1, BAD_APPLE
+LOOP1:
+    mov r2, 12
+    mov r0, FB_BASE
+    add r0, 11
+LOOP2:
+    ldr   r3, r1
+    str   r3, r0
+    add   r1, 1
+    sub   r0, 1
+    sub.s r2, 1
+    b.ne LOOP2
+
+    b LOOP1
+
+A: b A
+
+.at 128
+BAD_APPLE:
+.bin_include "test/ba.bin"

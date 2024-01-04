@@ -1,0 +1,76 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "mia",
+    "patterns": [
+        { "include": "#keywords" },
+        { "include": "#directives" },
+        { "include": "#labels" },
+        { "include": "#registers" },
+        { "include": "#comments" },
+        { "include": "#strings" },
+        { "include": "#numbers" },
+        { "include": "#names" }
+    ],
+    "repository": {
+        "directives": {
+            "patterns": [
+                {
+                    "name": "entity.name.class",
+                    "match": "(?i)\\b\\.(var|at|fill|bin_include)\\b"
+                }
+            ]
+        },
+        "labels": {
+            "patterns": [
+                {
+                    "name": "support.class",
+                    "match": "(?i)\\b[a-z][a-z_0-9]*:\\b"
+                }
+            ]
+        },
+        "registers": {
+            "patterns": [
+                {
+                    "name": "variable.parameter",
+                    "match": "(?i)\\br[0-3]\\b"
+                }
+            ]
+        },
+        "keywords": {
+            "patterns": [
+                {
+                    "name": "keyword",
+                    "match": "(?i)\\b((and|orr|add|sub)(\\.[cs]+)?|cmp|tst|str|ldr|(lsl|lsr|asr|mov)(\\.n)?|b(\\.(eq|ne|hs|lo|mi|pl|vs|vc|hi|ls|ge|lt|gt|le|xx|al))?)\\b"
+                }
+            ]
+        },
+        "numbers": {
+            "patterns": [
+                {
+                    "name": "constant.numeric",
+                    "match": "(?i)\\b(0x[0-9a-f]+|-?[\\d]+)\\b"
+                }
+            ]
+        },
+        "names": {
+            "patterns": [
+                {
+                    "name": "variable.name",
+                    "match": "(?i)\\b[a-z][a-z_0-9]*\\b"
+                }
+            ]
+        },
+        "strings": {
+            "name": "string",
+            "begin": "\"",
+            "end": "\"",
+            "patterns": []
+        },
+        "comments": {
+            "name": "comment.line",
+            "begin": "//",
+            "end": "\n"
+        }
+    },
+    "scopeName": "source.mia"
+}
