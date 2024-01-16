@@ -1,13 +1,16 @@
 import syntax from "syntax-cli";
 import lexGrammar from "./mia.lex.js";
-import { readFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
 import { createWriteStream, readFileSync } from "fs";
 import { instructionEmitters } from "./remimo.js";
+import { dirname, resolve } from "path";
 import MiaError from "./error.js";
 
 //#region Constants
 const MIN_ADDR = 0;
 const MAX_ADDR = 2 ** 14;
+
+let basePath = process.cwd();
 
 const CONDITIONS = [
     "eq",
@@ -222,15 +225,16 @@ function handleDirective(tk, tl, state) {
             break;
         case "bin_include":
             const fn = tl.take("STRING");
+            const path = resolve(basePath, fn.value);
 
             let buf;
             try {
-                buf = readFileSync(fn.value);
+                buf = readFileSync(path);
             } catch {
                 throw new MiaError(
                     tk,
                     "FileError",
-                    `Couldn't include "${fn.value}"`
+                    `Couldn't include "${path}"`
                 );
             }
             const l = Math.ceil(buf.length);
@@ -346,24 +350,32 @@ function hex(n, prefix = false) {
     return (prefix ? "0x" : "") + n.toString(16).padStart(4, "0");
 }
 
-async function main(infile, outfile) {
+async function main(infile, outfile, ...args) {
     const instr = await readFile(infile, "utf-8");
+    basePath = dirname(infile);
     const image = assemble(instr);
-    const ws = createWriteStream(outfile, { flags: "w" });
-    {
-        ws.write("v3.0 hex words addressed\n");
-        let addr = 0;
-        do {
-            let line = `${hex(addr)}:`;
-            for (let i = 0; i < 16; i++) {
-                line += ` ${hex(image[addr + i] ?? 0, true)}`;
-            }
-            ws.write(line);
-            ws.write("\n");
-            addr += 16;
-        } while (addr < image.length);
+    if (args.includes("--raw")) {
+        await writeFile(
+            outfile,
+            image.map((x) => (x >> 8) | (x << 8))
+        );
+    } else {
+        const ws = createWriteStream(outfile, { flags: "w" });
+        {
+            ws.write("v3.0 hex words addressed\n");
+            let addr = 0;
+            do {
+                let line = `${hex(addr)}:`;
+                for (let i = 0; i < 16; i++) {
+                    line += ` ${hex(image[addr + i] ?? 0, true)}`;
+                }
+                ws.write(line);
+                ws.write("\n");
+                addr += 16;
+            } while (addr < image.length);
+        }
+        await new Promise((r) => ws.close(r));
     }
-    await new Promise((r) => ws.close(r));
     console.log("Success!");
 }
 

@@ -1,2 +1,5 @@
-node_modules
+**/node_modules
 mia/test/*.ram
+**/bun.lockb
+rem/build
+*.out

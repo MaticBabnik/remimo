@@ -19,4 +19,4 @@ A: b A
 
 .at 128
 BAD_APPLE:
-.bin_include "test/ba.bin"
+.bin_include "./ba.bin"

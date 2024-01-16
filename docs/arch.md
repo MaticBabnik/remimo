@@ -41,7 +41,7 @@ Based on the contents of the top half there exists 2 versions of each ALU instru
 Performs the ALU operation between `Rd` and `Rs` and stores the result in `Rd`.
 
 ```
-|7|6|5|4     1|
+|7|6|5|4     0|
 |S|C|F|ignored|
 ```
 
@@ -62,7 +62,7 @@ If bit 5 is set, the Result will be discarded (useful for comparisons).
 Performs the ALU operation between `Rd` and the immediate and stores the result in `Rd`.
 
 ```
-|7|6         1|
+|7|6         0|
 |S| Immediate |
 ```
 
@@ -134,7 +134,7 @@ if bit 8 is set the immediate gets shifted left by 8.
 ### Absolute branch
 
 ```
-|15  12|11                 0| 
+|15  12|11                 0|
 | 1000 |       Address      |
 ```
 
@@ -147,9 +147,10 @@ Branches to instruction at address.
 ### Relative conditional branch
 
 ```
-|15  12|11   8|7                0| 
+|15  12|11   8|7                0|
 | 1001 | Cond | Signed offset    |
 ```
+
 Branches to instruction if condition is met.
 
 #### Signed Offset
@@ -158,21 +159,21 @@ Offset is an 8-bit signed immediate (Max distance is 128).
 
 #### Conditions
 
-| Cond | Short | Desc | Flags |
-| --- | --- | ---| --- |
-| 0 | eq | Equal | `Z` |
-| 1 | ne | Not equal | `!Z` |
-| 2 | hs | higher same | `C` |
-| 3 | lo | Unsigned lower| `!C` |
-| 4 | mi | Negative | `N` |
-| 5 | pl | Positive or zero | `!N` |
-| 6 | vs | Signed overflow | `V` |
-| 7 | vc | No signed overflow | `!V` |
-| 8 | hi | Unsigned higher | `C && !Z` |
-| 9 | ls | Unsigned lower or same | `!C \|\| Z` |
-| 10 | ge | Signed greater or equal | `N==V` |
-| 11 | lt | Signed less | `N!=V` |
-| 12 | gt | Signed greater | `!Z && N==V` |
-| 13 | le | Signed less or equal | `Z \|\| N!=V` |
-| 14 | xx | Never | `0` |
-| 15 | al | Always | `1` |
+| Cond | Short | Desc                    | Flags         |
+| ---- | ----- | ----------------------- | ------------- |
+| 0    | eq    | Equal                   | `Z`           |
+| 1    | ne    | Not equal               | `!Z`          |
+| 2    | hs    | higher same             | `C`           |
+| 3    | lo    | Unsigned lower          | `!C`          |
+| 4    | mi    | Negative                | `N`           |
+| 5    | pl    | Positive or zero        | `!N`          |
+| 6    | vs    | Signed overflow         | `V`           |
+| 7    | vc    | No signed overflow      | `!V`          |
+| 8    | hi    | Unsigned higher         | `C && !Z`     |
+| 9    | ls    | Unsigned lower or same  | `!C \|\| Z`   |
+| 10   | ge    | Signed greater or equal | `N==V`        |
+| 11   | lt    | Signed less             | `N!=V`        |
+| 12   | gt    | Signed greater          | `!Z && N==V`  |
+| 13   | le    | Signed less or equal    | `Z \|\| N!=V` |
+| 14   | xx    | Never                   | `0`           |
+| 15   | al    | Always                  | `1`           |

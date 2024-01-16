@@ -11,9 +11,32 @@ It's based on [MiniMiMo](https://github.com/LAPSyLAB/RALab-STM32H7/tree/main/Min
 
 ## MImo Assembler
 
-The most scuffed assembler ever!? To assemble a program run:
-`node mia.js source.mia output.ram`
+The most scuffed assembler ever!?
+
+### Usage
+
+To assemble a Logisim RAM image run:
+
+```sh
+node mia.js source.mia output.out --raw
+```
+
+When assembling for the emulator use the `--raw` flag to spit out a binary file instead.
+
+```sh
+node mia.js source.mia output.out --raw
+```
 
 For example programs see the `mia/test` directory.
+
+## Remimo EMulator
+
+Since Logisim only runs at about 120Hz (60 IPS) I wrote a faster emulator (more than 300000x faster).
+The `index.ts` is a simple IO-less benchmark that loads a file and mesures executed instructions per second.
+
+### Extending / porting
+
+The `remimo.ts` file is the portable emulator core.
+To implement memory mapped IO wrap a UInt16Array with a custom getter/setter.
 
 ![Screenshot of the main circuit](docs/remimo.png)
